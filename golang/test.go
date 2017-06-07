@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "strconv"
 
 func main() {
     fizzBuzz()
@@ -9,11 +10,11 @@ func main() {
 func fizzBuzz() {
     for i := 0; i < 100 ; i++ {
         if i % (3 * 5) == 0 {
-            fmt.Println(fmt.Sprint(i) + ": FizzBuzz")
+            fmt.Println(strconv.Itoa(i) + ": FizzBuzz")
         } else if i % 5 == 0 {
-            fmt.Println(fmt.Sprint(i) + ": Fizz")
+            fmt.Println(strconv.Itoa(i) + ": Fizz")
         } else if i % 3 == 0 {
-            fmt.Println(fmt.Sprint(i) + ": Buzz")
+            fmt.Println(strconv.Itoa(i) + ": Buzz")
         }
     }
 }
