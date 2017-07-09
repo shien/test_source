@@ -17,6 +17,7 @@ func main() {
 }
 
 func fizzBuzz(num int, s chan<- int) {
+
     for i := 0; i < 100 ; i++ {
         if i % (3 * 5) == 0 {
             fmt.Println(strconv.Itoa(i) + ": FizzBuzz -> " + strconv.Itoa(num))
@@ -27,4 +28,5 @@ func fizzBuzz(num int, s chan<- int) {
         }
     }
     s <- num
+
 }
