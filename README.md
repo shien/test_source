@@ -7,3 +7,5 @@ test_source
 
 ## erlang
 
+## rust
+
