@@ -8,32 +8,32 @@ import (
 )
 
 func query1(db *sql.DB, id int) {
-
-	var result = ""
-
-	err := db.QueryRow("INSERT INTO users (id, user_name) VALUES (?, 'tekitou')", id)
+	result, err := db.Exec("INSERT INTO users (id, user_name, PASSWORD) VALUES (?, 'tekitou', sha2('PASSWORD', 224))", id)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println("result1:" + result)
+	fmt.Println(result)
 }
 
 func query2(db *sql.DB) {
 
-	var result = ""
-
 	fmt.Println("query2")
-	err := db.QueryRow("select * from users").Scan(&result)
+	rows, err := db.Query("select * from users")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("result2:" + result)
+	columns, err := rows.Columns()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(columns)
 }
 
 func main() {
 	db, dberr := sql.Open("mysql", "USER:PASSWORD@/DBNAME")
+
 	if dberr != nil {
 		log.Fatal(dberr)
 	}
