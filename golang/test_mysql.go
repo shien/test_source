@@ -3,12 +3,21 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 	"log"
 )
 
+type User struct {
+	id                  int
+	user_name           string
+	mail_address        string
+	PASSWORD            string
+	create_account_date mysql.NullTime
+	level               int
+}
+
 func query1(db *sql.DB, id int) {
-	result, err := db.Exec("INSERT INTO users (id, user_name, PASSWORD) VALUES (?, 'tekitou', sha2('PASSWORD', 224))", id)
+	result, err := db.Exec("INSERT INTO users (id, user_name, PASSWORD) VALUES (?, 'tekitou', sha2(?, 224))", id, "PASSWORD")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,6 +31,7 @@ func query2(db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer rows.Close()
 
 	columns, err := rows.Columns()
 	if err != nil {
@@ -29,6 +39,18 @@ func query2(db *sql.DB) {
 	}
 
 	fmt.Println(columns)
+
+	column_types, err := rows.ColumnTypes()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for i := 0; i < len(column_types); i++ {
+		fmt.Println(column_types[i].Name())
+		fmt.Println(column_types[i].Length())
+		fmt.Println(column_types[i].ScanType().Name())
+	}
+
 }
 
 func main() {
