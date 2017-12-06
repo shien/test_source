@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
 )
 
@@ -11,22 +13,22 @@ type User struct {
 	id                  int
 	user_name           string
 	mail_address        string
-	PASSWORD            string
+	password            string
 	create_account_date mysql.NullTime
 	level               int
 }
 
-func query1(db *sql.DB, id int) {
-	result, err := db.Exec("INSERT INTO users (id, user_name, PASSWORD) VALUES (?, 'tekitou', sha2(?, 224))", id, "PASSWORD")
+func Query1(db *sql.DB, id int) {
+	result, err := db.Exec("INSERT INTO users (id, user_name, password) VALUES (?, 'tekitou', sha2(?, 224))", id, "password")
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(result)
 }
 
-func query2(db *sql.DB) {
+func Query2(db *sql.DB) {
 
-	fmt.Println("query2")
+	fmt.Println("Query2")
 	rows, err := db.Query("select * from users")
 	if err != nil {
 		log.Fatal(err)
@@ -53,8 +55,16 @@ func query2(db *sql.DB) {
 
 }
 
+func TestGorm() {
+	db, err := gorm.Open("mysql", "root:password@/test_db?charset=utf8&parseTime=True&loc=Local")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+}
+
 func main() {
-	db, dberr := sql.Open("mysql", "USER:PASSWORD@/DBNAME")
+	db, dberr := sql.Open("mysql", "root:password@/test_db")
 
 	if dberr != nil {
 		log.Fatal(dberr)
@@ -63,6 +73,8 @@ func main() {
 
 	id := 105
 
-	query1(db, id)
-	query2(db)
+	Query1(db, id)
+	Query2(db)
+
+	TestGorm()
 }
