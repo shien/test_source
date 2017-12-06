@@ -13,13 +13,13 @@ type User struct {
 	id                  int
 	user_name           string
 	mail_address        string
-	password            string
+	PASSWORD            string
 	create_account_date mysql.NullTime
 	level               int
 }
 
 func Query1(db *sql.DB, id int) {
-	result, err := db.Exec("INSERT INTO users (id, user_name, password) VALUES (?, 'tekitou', sha2(?, 224))", id, "password")
+	result, err := db.Exec("INSERT INTO users (id, user_name, PASSWORD) VALUES (?, 'tekitou', sha2(?, 224))", id, "PASSWORD")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,7 +56,7 @@ func Query2(db *sql.DB) {
 }
 
 func TestGorm() {
-	db, err := gorm.Open("mysql", "root:password@/test_db?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "USER:PASSWORD@/DBNAME?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +64,7 @@ func TestGorm() {
 }
 
 func main() {
-	db, dberr := sql.Open("mysql", "root:password@/test_db")
+	db, dberr := sql.Open("mysql", "USER:PASSWORD@/DBNAME")
 
 	if dberr != nil {
 		log.Fatal(dberr)
